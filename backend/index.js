@@ -5,7 +5,9 @@ import "dotenv/config";
 
 const app = express();
 app.use(cors({
-  origin:"https://nutf.onrender.com",
+  origin:["https://nutf.onrender.com",
+    "https://nutb.onrender.com/"
+  ],
   credentials:true,
 }));
 app.use(express.json());
