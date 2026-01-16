@@ -63,5 +63,4 @@ We value the contributions from the community and encourage responsible disclosu
 ## 🔒 Resources
 
 - [GitHub Security Advisories](https://docs.github.com/en/code-security/security-advisories)
-- [OpenSSF Best Practices](https://bestpractices.dev/)
-- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+
