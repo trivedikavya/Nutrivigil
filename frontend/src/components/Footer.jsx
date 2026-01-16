@@ -27,6 +27,7 @@ import {
 
 const Footer = () => {
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const currentYear = new Date().getFullYear();
 
@@ -60,18 +61,39 @@ const Footer = () => {
   ];
 
   const handleSubscribe = () => {
-    if (email) {
-      setIsSubscribed(true);
-      setTimeout(() => {
-        setIsSubscribed(false);
-        setEmail('');
-      }, 3000);
+    const error = validateEmail(email);
+
+    if (error) {
+      setEmailError(error);
+      return;
     }
+
+    setIsSubscribed(true);
+
+    setTimeout(() => {
+      setIsSubscribed(false);
+      setEmail('');
+      setEmailError('');
+    }, 3000);
   };
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const validateEmail = (value) => {
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!value) {
+      return 'Email is required';
+    }
+    if (!emailRegex.test(value)) {
+      return 'Please enter a valid email address';
+    }
+    return '';
+  };
+
 
   return (
     <footer className="relative bg-gradient-to-b from-[#05050A] via-[#0A0A14] to-black text-gray-300 overflow-hidden">
@@ -288,16 +310,37 @@ const Footer = () => {
                 <input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setEmail(value);
+                    setEmailError(validateEmail(value));
+                    }}
                   placeholder="Enter your email"
                   className="w-full bg-white/5 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all hover:bg-white/10"
                 />
               </div>
+
+              {emailError && (
+                <motion.p
+                  className="text-xs text-red-400 mt-1 ml-1"
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  {emailError}
+                </motion.p>
+              )}
               <motion.button 
                 onClick={handleSubscribe}
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/40 flex items-center justify-center gap-2 group"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                disabled={!!emailError || !email}
+                className={`w-full px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 group
+                  ${
+                    emailError || !email
+                      ? 'bg-gray-600 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500'
+                  }
+                `}
+                whileHover={!emailError ? { scale: 1.02 } : {}}
+                whileTap={!emailError ? { scale: 0.98 } : {}}
               >
                 {isSubscribed ? (
                   <>

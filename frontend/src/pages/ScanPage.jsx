@@ -133,6 +133,11 @@ function ScanPage() {
     yellow: <AlertCircle className="w-8 h-8 text-yellow-400" />,
     red: <XCircle className="w-8 h-8 text-red-400" />,
   };
+  const TrafficTitle = {
+    green: t('safety.safe'),
+    yellow: t('safety.moderate'),
+    red: t('safety.unsafe'),
+  };
 
   const speak = (text) => {
     window.speechSynthesis.cancel(); 
@@ -343,7 +348,7 @@ function ScanPage() {
                 {TrafficIcon[result.traffic_light]}
                 <h2 className={`text-xl font-bold transition-colors ${theme === 'dark' ? "text-white" : "text-gray-900"
                   }`}>
-                  {result.verdict_title}
+                 {TrafficTitle[result.traffic_light]}
                 </h2>
               </div>
 

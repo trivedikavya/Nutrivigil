@@ -1,12 +1,6 @@
-<!-- HEADER BANNER -->
-<p align="center">
-  <img src="https://image2url.com/images/1763898620868-b9698f6f-eff6-4db6-8156-a735a072afce.jpeg" alt="NutriVigil Banner - Next Level Food Scan AI" width="200"/>
-</p>
+<h1 align="center">NutriVigil</h1>
 
 <p align="center">
-  <a href="https://nutf.onrender.com" target="_blank">
-    <img src="https://img.shields.io/badge/Live%20Demo-00C853?style=for-the-badge&logo=google-chrome&logoColor=white" />
-  </a>
   <img src="https://img.shields.io/badge/AI%20Food%20Scan-Gemini%20v2.5-5859EA?style=for-the-badge&logo=google&logoColor=white" />
   <img src="https://img.shields.io/badge/Nutrition%20Facts-API%20Ninjas-18D89E?style=for-the-badge&logo=nutanix&logoColor=white" />
   <img src="https://img.shields.io/badge/Express%20API-FFD600?style=for-the-badge&logo=express&logoColor=black" />
@@ -15,9 +9,9 @@
 
 ---
 
-<p align="center" style="font-size:1.6em">
-  <strong>🥗 NutriVigil: Snap. Analyze. Elevate Every Bite.</strong><br>
-  <em>The AI-powered nutrition platform—smart, personalized, and beautifully fast.</em>
+<p align="center">
+  <strong>An AI-powered nutrition analysis application using the Gemini v2.5 API.</strong><br>
+  <em>Educational project demonstrating the integration of Computer Vision and Large Language Models for dietary health analysis.</em>
 </p>
 
 ---
@@ -30,130 +24,48 @@
 
 ---
 
-## 🚀 Why NutriVigil?
+## 📂 Project Overview
 
-<p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=24&duration=4000&pause=1000&color=00C853&center=true&vCenter=true&width=660&lines=No+nutrition+guesswork.;Instant+food+scan+with+AI.;Personalized+advice+for+your+health.;Eat+confidently,+anytime!" alt="Why NutriVigil Typewriter Effect" />
-</p>
+NutriVigil is a full-stack web application designed to analyze food images and provide nutritional data. It leverages **Google's Gemini v2.5** for image recognition and the **API Ninjas Nutrition database** for caloric breakdown.
 
-- 🤳 **AI-Powered Food Scan:** Instantly analyze any meal with cutting-edge Gemini v2.5 artificial intelligence.
-- 🩺 **Personalized Health:** Your conditions, your guidelines—gluten-free, diabetes, hypertension, allergies, and more.
-- 🚦 **Smart Safety Signals:** AI color-coding for instant “safe/red flag” nutrition advice.
-- 🧬 **Decoded Nutrition:** Macros & micros visualized—transformed from data to clear insights.
-- 🏆 **Actionable Wellness:** Smart tips, tracking goals, saving reports—NutriVigil helps guide wisdom, not just stats.
-- ⚡ **Ultra-Responsive UI:** Seamless, animated, app-like experience—performance that's as healthy as your diet.
+**Key Technical Features:**
+- **AI Integration:** Implements Gemini API for food recognition from user-uploaded images.
+- **Health Algorithm:** Custom logic to cross-reference food data with user health conditions (Diabetes, Hypertension, etc.).
+- **Data Visualization:** Renders macro/micronutrients using responsive charts.
+- **RESTful Architecture:** Express.js backend handling secure API calls and file uploads via Multer.
 
 ---
 
-## 🛠️ Tech Power-Ups
+## 🛠️ Tech Stack
 
 | Frontend                   | Backend                      | Intelligence & Data         |
 |:--------------------------:|:---------------------------:|:--------------------------:|
 | ⚛️ React (Vite)            | 🖥️ Node.js + Express        | 🤖 Gemini AI v2.5 (Google) |
-| 🎨 Tailwind + Animations   | 🗂️ Multer (Smart Uploads)   | 🥗 API Ninjas Nutrition    |
-| 🗃️ Lucide + Custom SVGs    | 🚦 Advanced Safety Logic     | 🔒 Secure Axios Calls      |
-| 🚀 PWA Capable             | 🧠 Context + History         | 🔔 Smart Notifications     |
+| 🎨 Tailwind CSS            | 🗂️ Multer (File Handling)   | 🥗 API Ninjas Nutrition    |
+| 🗃️ Lucide React            | 🚦 Custom Middleware         | 🔒 Axios                   |
 
 ---
 
-## 🗺️ Intelligent Architecture
+## 🗺️ System Architecture
 
 ```mermaid
 graph TD
-  U[🧑 User] -->|Upload . Select . Analyze| FE[⚛️ NutriVigil Frontend]
-  FE -->|API Calls| BE[🖥️ Express Backend]
-  BE -->|AI Analysis| AI[🤖 Gemini 2.5]
-  BE -->|Nutrition Data| API[🥗 API Ninjas]
-  BE -->|Safety Logic| LOGIC[🚦 Custom Health Algorithm]
-  FE -->|Results & Animation| UX[💎 Next-Level UI]
+  U[🧑 User] -->|Upload Image| FE[⚛️ NutriVigil Frontend]
+  FE -->|API Request| BE[🖥️ Express Backend]
+  BE -->|Image Analysis| AI[🤖 Gemini 2.5]
+  BE -->|Fetch Data| API[🥗 API Ninjas]
+  BE -->|Process Logic| LOGIC[🚦 Health Algorithm]
+  FE -->|Render Data| UX[UI Components]
 
-  classDef frontend fill:#61dafb,stroke:#222,stroke-width:2px;
-  classDef backend fill:#52BF6A,stroke:#222,stroke-width:2px;
-  classDef ai fill:#5859EA,stroke:#222,stroke-width:2px;
-  classDef api fill:#18D89E,stroke:#222,stroke-width:2px;
-  classDef logic fill:#F7B731,stroke:#222,stroke-width:2px;
-  classDef ux fill:#FFD600,stroke:#222,stroke-width:2px;
-
-  class FE frontend
-  class BE backend
-  class AI ai
-  class API api
-  class LOGIC logic
-  class UX ux
 ```
-
----
-
-## 🌐 Project Structure
-
-```shell
+## Local Installation 
 NutriVigil/
- ├─ frontend/      # React + Vite + Tailwind (Animated UI)
- ├─ backend/       # Node.js + Express + Multer (REST/AI)
+ ├─ frontend/       # React + Vite + Tailwind
+ ├─ backend/        # Node.js + Express + Multer
  └─ README.md
-```
 
----
+ ## APIs Required
+ To replicate this project, you will need your own API keys:
 
-## ⚡ Quickstart
-
-```bash
-# 1. Clone the repo
-git clone https://github.com/<your-username>/NutriVigil.git && cd NutriVigil
-
-# 2. Install dependencies
-cd frontend && npm i
-cd ../backend && npm i
-
-# 3. Add your API keys in backend/.env (see backend/.env.example)
-
-# 4. Start development servers
-cd frontend && npm run dev
-cd ../backend && npm run dev
-```
-
----
-
-## 🔑 API Keys Needed
-
-- **Gemini API Key:** [Google AI Studio](https://makersuite.google.com/app/apikey)
-- **API Ninjas Key:** [API Ninjas Nutrition](https://api-ninjas.com/api/nutrition)
-
----
-
-
-## ✨ Features
-
-- 📸 Snap or upload food images—AI-powered ingredient & nutrition detection.
-- 🏷️ Personal health profile (diabetes, allergies, hypertension, and more).
-- 🚦 AI-powered safety traffic light (color + advice).
-- 📊 Nutrient breakdown with easy visual summaries.
-- 📝 Personalized recommendations, goals, and smart reporting.
-- ⚡ App-level speed and animation—100% responsive.
-
----
-
-## 🧰 Tech Stack
-
-**Backend:**
-- Node.js + Express
-- Multer (file uploads)
-- Gemini AI (food analysis)
-- API Ninjas (nutrition database)
-- Axios
-
-**Frontend:**
-- React
-- Vite
-- Tailwind CSS + Animations
-- Lucide React + SVGs
-- PWA-ready, responsive
-
----
-
-## 🚨 Disclaimer
-
-_NutriVigil provides AI-generated health guidance and nutrition facts for informational purposes. Always check with certified health professionals before making major dietary changes._
-
----
-````
+1. Gemini API Key: Google AI Studio
+2. API Ninjas Key: API Ninjas Nutrition
