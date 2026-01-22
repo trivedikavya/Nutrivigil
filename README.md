@@ -74,6 +74,8 @@ NutriVigil/
 
 ## Project Structure 
 
+```
+
 Nutrivigil/
 │
 ├── backend/                      # Backend server handling API and AI processing
@@ -142,4 +144,5 @@ Nutrivigil/
 ├── SECURITY.md                   # Security policy
 └── package-lock.json             # Root lock file (if present)
 
+```
 ---
