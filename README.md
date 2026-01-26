@@ -1,62 +1,77 @@
-<h1 align="center">NutriVigil</h1>
+# 🥗 NutriVigil
 
-<p align="center">
-  <img src="https://img.shields.io/badge/AI%20Food%20Scan-Gemini%20v2.5-5859EA?style=for-the-badge&logo=google&logoColor=white" />
-  <img src="https://img.shields.io/badge/Nutrition%20Facts-API%20Ninjas-18D89E?style=for-the-badge&logo=nutanix&logoColor=white" />
-  <img src="https://img.shields.io/badge/Express%20API-FFD600?style=for-the-badge&logo=express&logoColor=black" />
-  <img src="https://img.shields.io/badge/Multer%20Uploads-F7B731?style=for-the-badge&logo=upload&logoColor=white" />
-</p>
+**NutriVigil** is an AI-powered nutrition analysis web application that analyzes food images and provides nutritional insights using computer vision and large language models.
 
----
+This is an educational full-stack project demonstrating the integration of:
 
-<p align="center">
-  <strong>An AI-powered nutrition analysis application using the Gemini v2.5 API.</strong><br>
-  <em>Educational project demonstrating the integration of Computer Vision and Large Language Models for dietary health analysis.</em>
-</p>
++ Image understanding via Google Gemini v2.5
++ Nutrition data from API Ninjas
++ A modern React + Node.js architecture
 
----
+## 📌 Project Overview
 
-<div align="center">
-  <img src="https://image2url.com/images/1763887204703-5c90a51a-5fec-45a3-b6ce-c25e7acba923.png" width="45%" alt="Food Analysis Screen"/>
-  &nbsp;
-  <img src="https://image2url.com/images/1763887449739-167e9658-ae5c-4223-beec-ed112f5ae824.png" width="45%" alt="Personalized Traffic Light Safety"/>
-</div>
+NutriVigil allows users to upload food images and receive:
 
----
+* Identified food items
+* Estimated nutritional breakdown
+* Contextual health insights based on user conditions (e.g., diabetes, hypertension)
 
-## 📂 Project Overview
+The project focuses on clarity, modularity, and responsible API usage, rather than production-grade medical claims.
 
-NutriVigil is a full-stack web application designed to analyze food images and provide nutritional data. It leverages **Google's Gemini v2.5** for image recognition and the **API Ninjas Nutrition database** for caloric breakdown.
+## ✨ Key Features
 
-**Key Technical Features:**
-- **AI Integration:** Implements Gemini API for food recognition from user-uploaded images.
-- **Health Algorithm:** Custom logic to cross-reference food data with user health conditions (Diabetes, Hypertension, etc.).
-- **Data Visualization:** Renders macro/micronutrients using responsive charts.
-- **RESTful Architecture:** Express.js backend handling secure API calls and file uploads via Multer.
+### 🧠 AI-based Food Recognition
+Uses Google Gemini v2.5 to analyze uploaded food images.
 
----
+### 🥗 Nutrition Breakdown
+Fetches calorie and macro data via API Ninjas Nutrition database.
+
+### 🚦 Health Context Logic
+Custom rules to interpret food impact based on user health conditions.
+
+### 📊 Data Visualization
+Responsive charts for macro and micronutrients.
+
+### 🌍 Multi-Language Support
+Internationalization (i18n) support on the frontend.
+
+### 🔐 Secure API Handling
+Backend handles all API calls securely using environment variables.
 
 ## 🛠️ Tech Stack
+**Frontend**
 
-| Frontend                   | Backend                      | Intelligence & Data         |
-|:--------------------------:|:---------------------------:|:--------------------------:|
-| ⚛️ React (Vite)            | 🖥️ Node.js + Express        | 🤖 Gemini AI v2.5 (Google) |
-| 🎨 Tailwind CSS            | 🗂️ Multer (File Handling)   | 🥗 API Ninjas Nutrition    |
-| 🗃️ Lucide React            | 🚦 Custom Middleware         | 🔒 Axios                   |
++ ⚛️ React (Vite)
++ 🎨 Tailwind CSS
++ 🗂️ Lucide React
++ 🌐 i18n (multi-language support)
 
----
+**Backend**
+
++ 🖥️ Node.js + Express
++ 🗂️ Multer (image uploads)
++ 🔒 Axios
++ 🚦 Custom middleware
+
+**AI & Data**
+
++ 🤖 Google Gemini v2.5 API
++ 🥗 API Ninjas Nutrition Database
 
 ## 🗺️ System Architecture
+Frontend (React + Vite)
+        |
+        |  HTTP requests (image + metadata)
+        v
+Backend (Node.js + Express)
+        |
+        |  AI + Nutrition API calls
+        v
+Gemini API + API Ninjas
 
-```mermaid
-graph TD
-  U[🧑 User] -->|Upload Image| FE[⚛️ NutriVigil Frontend]
-  FE -->|API Request| BE[🖥️ Express Backend]
-  BE -->|Image Analysis| AI[🤖 Gemini 2.5]
-  BE -->|Fetch Data| API[🥗 API Ninjas]
-  BE -->|Process Logic| LOGIC[🚦 Health Algorithm]
-  FE -->|Render Data| UX[UI Components]
-
+```bash
+# Check that .env is listed in .gitignore
+cat .gitignore | grep ".env"
 ```
 ## Local Installation and Setup
 
@@ -106,143 +121,108 @@ npm run dev
 
 ```
 
+All sensitive operations and API keys are handled server-side.
+
+## 📂 Project Structure
+NutriVigil/
+│
+├── backend/
+│   ├── controller/
+│   │   └── analyze.js
+│   ├── middleware/
+│   │   └── upload.js
+│   ├── services/
+│   │   └── googleservices.js
+│   ├── utils/
+│   │   ├── getmimetype.js
+│   │   ├── imgconversion.js
+│   │   └── parseGeminiJson.js
+│   ├── index.js
+│   ├── package.json
+│   └── .gitignore
+│
+├── frontend/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── contexts/
+│   │   ├── hooks/
+│   │   ├── i18n/
+│   │   ├── pages/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── index.html
+│   ├── vite.config.js
+│   ├── package.json
+│   └── .gitignore
+│
+├── CODE-OF-CONDUCT.md
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── License.md
+├── MIT LICENSE.md
+└── README.md
+
+
+⚠️ Note: Previous screenshots and outdated structure references have been intentionally removed to avoid confusion.
+
 ## 🔐 Security & Environment Setup
+**Required API Keys**
 
-### Required API Keys
-To run this project locally, you'll need to obtain API keys from:
+You will need:
++ Google Gemini API key
++ API Ninjas Nutrition API key
 
-1. **Gemini API Key** - Google AI Studio
-2. **API Ninjas Key** - API Ninjas Nutrition Database
-
-### Environment Variables Setup
-
-**IMPORTANT:** Never commit API keys to version control. Always use environment variables.
-
-#### Step 1: Copy the Example Environment File
-
+**Environment Setup (Backend)**
+**Step 1:** Create .env file
 ```bash
-# In the backend directory
 cd backend
+```
+```bash
 cp .env.example .env
 ```
 
-#### Step 2: Get Your API Keys
-
-**For Gemini API:**
-1. Visit [Google AI Studio](https://ai.google.dev/)
-2. Click "Get API Key"
-3. Create a new project or select existing one
-4. Generate an API key
-5. Copy the key and paste it in `.env` as `GEMINI_API_KEY`
-
-**For API Ninjas:**
-1. Sign up at [API Ninjas](https://api-ninjas.com/)
-2. Go to your dashboard
-3. Create a new API key
-4. Copy the key and paste it in `.env` as `NINJA_API_KEY`
-
-#### Step 3: Update Your .env File
-
-Edit `backend/.env`:
-```env
+**Step 2:** Add your keys
 PORT=3000
 NODE_ENV=development
 GEMINI_API_KEY=your_actual_gemini_key_here
 NINJA_API_KEY=your_actual_api_ninjas_key_here
+
+**Step 3:** Verify .env is ignored
+cat .gitignore | grep ".env"
+
+## ✅ Security Best Practices
+
+✔️ API keys are never committed to version control
+✔️ .env is ignored via .gitignore
+✔️ .env.example documents required variables
+✔️ Keys should be rotated regularly
+✔️ Production secrets should use platform-level secret managers
+
+## 🚀 Local Installation
+Backend
+```bash
+cd backend
+npm install
+npm run dev
 ```
-
-#### Step 4: Verify .env is Ignored
-
-The `.gitignore` file already includes `.env`. Verify before committing:
 
 ```bash
-# Check that .env is listed in .gitignore
-cat .gitignore | grep ".env"
+Frontend
+cd frontend
+npm install
+npm run dev
 ```
 
-### ✅ Best Practices for Security
+## ⚠️ Disclaimer
 
-✔️ Use `.env` files for local development (already in `.gitignore`)  
-✔️ Use platform secrets for production (Render, Vercel, Docker, etc.)  
-✔️ Never share or commit `.env` files  
-✔️ Use `.env.example` as a template for required variables  
-✔️ Rotate API keys regularly  
-✔️ Restrict API key permissions in provider dashboards  
+NutriVigil is an educational project and should not be used as a medical diagnostic tool. All nutritional outputs are estimations and intended for learning purposes only.
 
----
+## 🤝 Contributing
 
-## Project Structure 
+Contributions are welcome.
+Please read CONTRIBUTING.md before opening issues or pull requests.
 
-```
+## 📜 License
 
-Nutrivigil/
-│
-├── backend/                               # Backend server handling API and AI processing
-│   ├── controller/                        # Contains request handling logic
-│   │   └── analyze.js                     # Main controller to analyze uploaded food images
-│   │
-│   ├── middleware/                        # Middleware functions for request processing
-│   │   └── upload.js                      # Handles image uploads (e.g., using Multer)
-│   │
-│   ├── services/                          # External service integrations
-│   │   └── googleservices.js              # Connects to Google Gemini / AI services
-│   │
-│   ├── utils/                             # Helper utility functions
-│   │   ├── getmimetype.js                 # Detects MIME type of uploaded files
-│   │   ├── imgconversion.js               # Converts images to required formats
-│   │   └── parseGeminiJson.js             # Parses AI-generated JSON responses
-│   │
-│   ├── .gitignore                         # Ignores backend node_modules and env files
-│   ├── index.js                           # Entry point of the backend server
-│   ├── package.json                       # Backend dependencies and scripts
-│   └── package-lock.json                  # Locked dependency versions
-│
-├── frontend/                              # Frontend React + Vite application
-│   ├── src/
-│   │   ├── assets/                        # Static assets like images
-│   │   │   └── nutrivigile.jpeg           # App logo / banner image
-│   │   │
-│   │   ├── components/                    # Reusable UI components
-│   │   │   ├── Footer.jsx                 # Footer component
-│   │   │   ├── LanguagePicker.jsx         # Language selection component
-│   │   │   ├── Navbar.jsx                 # Navigation bar component
-│   │   │   └── VoiceQuery.jsx             # Voice-based food query component
-│   │   │
-│   │   ├── contexts/                      # React Context for global state
-│   │   │   └── ThemeContext.jsx           # Manages light/dark theme
-│   │   │
-│   │   ├── hooks/                         # Custom React hooks
-│   │   │   └── useThemeTranslation.js     # Combines theme and language logic
-│   │   │
-│   │   ├── i18n/                          # Multi-language translation setup
-│   │   │   ├── locales/                   # Language JSON files
-│   │   │   └── index.js                   # i18n configuration
-│   │   │
-│   │   ├── pages/                         # Application pages
-│   │   │   ├── Home.jsx                   # Landing page
-│   │   │   ├── Profile.jsx                # User profile page
-│   │   │   └── ScanPage.jsx               # Food image scanning page
-│   │   │
-│   │   ├── App.jsx                        # Root React component
-│   │   ├── index.css                      # Global styles
-│   │   └── main.jsx                       # Frontend entry point
-│   │
-│   ├── index.html                         # Main HTML template
-│   ├── nutrivigile.jpeg                  # Additional image asset
-│   ├── package.json                       # Frontend dependencies and scripts
-│   ├── package-lock.json                  # Locked dependency versions
-│   ├── vite.config.js                     # Vite build configuration
-│   └── .gitignore                         # Ignores frontend node_modules
-│
-├── .gitignore                             # Global git ignore rules
-├── CODE-OF-CONDUCT.md                     # Community behavior guidelines
-├── CONTRIBUTING.md                        # Contribution instructions
-├── License.md                             # License information
-├── MIT LICENSE.md                         # MIT license text
-├── README.md                              # Project documentation
-├── SECURITY.md                            # Security policy
-└── package-lock.json                      # Root lock file (if present)
-
-
-```
----
+This project is licensed under the MIT License.
