@@ -1,14 +1,22 @@
 {
   "appName": "NutriVigil",
+  "appName.dark": "NutriVigil",
+  "appName.light": "NutriVigil",
   "tagline": "Your Personal AI Health Scanner",
+  "tagline.dark": "Scanning in the Dark...",
+  "tagline.light": "Scanning in the Light...",
   "startScanning": "Start Scanning",
   "howItWorks": "How it Works",
 
   "nav": {
     "home": "Home",
-    "profile": "My Profile"
+    "home.dark": "Home",
+    "home.light": "Home",
+    "profile": "My Profile",
+    "profile.dark": "My Profile",
+    "profile.light": "My Profile"
   },
-  
+
   "steps": {
     "upload": {
       "title": "1. Upload Photo",
@@ -25,15 +33,15 @@
   },
 
   "profile": {
-  "title": "My Profile",
-  "subtitle": "Manage your health preferences",
-  "healthCondition": "Health Condition",
-  "selectCondition": "Select a condition...",
-  "saved": "✓ Saved automatically",
-  "whyTitle": "Why set your condition?",
-  "whyDesc": "This helps NutriVigil give you accurate, personalized food safety recommendations based on your health condition. Saved locally, not uploaded."
+    "title": "My Profile",
+    "subtitle": "Manage your health preferences",
+    "healthCondition": "Health Condition",
+    "selectCondition": "Select a condition...",
+    "saved": "✓ Saved automatically",
+    "whyTitle": "Why set your condition?",
+    "whyDesc": "This helps NutriVigil give you accurate, personalized food safety recommendations based on your health condition. Saved locally, not uploaded."
   },
-  
+
   "conditions": {
     "diabetes": "Diabetes",
     "hypertension": "Hypertension",
@@ -57,12 +65,20 @@
     "scanning": "Scanning...",
     "food": "Food",
     "reason": "Reason",
-    "suggestion": "Suggestion"
+    "suggestion": "Suggestion",
+    "submitQuery": "Submit Query",
+    "thinking": "Thinking..."
   },
   
   "errors": {
     "noImage": "Please select an image file",
     "noCondition": "Please set your health condition first",
     "analysisFailed": "Failed to analyze food"
+  }
+,
+  "safety": {
+    "safe": "Safe",
+    "moderate": "Moderate",
+    "unsafe": "Unsafe"
   }
 }

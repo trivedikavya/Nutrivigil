@@ -69,6 +69,10 @@ Backend (Node.js + Express)
         v
 Gemini API + API Ninjas
 
+```bash
+# Check that .env is listed in .gitignore
+cat .gitignore | grep ".env"
+```
 
 All sensitive operations and API keys are handled server-side.
 
