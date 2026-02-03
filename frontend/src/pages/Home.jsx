@@ -155,7 +155,8 @@ const Home = () => {
             </button>
 
             <button
-              className={`px-10 py-5 text-lg font-bold rounded-2xl border transition-all flex items-center gap-2 hover:bg-current/5 ${
+              onClick={() => window.open('https://github.com/Gagan021-5/Nutrivigil', '_blank')}
+              className={`px-10 py-5 text-lg font-bold rounded-2xl border transition-all flex items-center gap-2 hover:bg-current/5 cursor-pointer ${
                 isLight ? "border-slate-200 text-slate-800" : "border-white/10 text-white"
               }`}
             >
