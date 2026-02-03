@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import {
-  ShieldCheck,
-  Twitter,
-  Instagram,
-  Linkedin,
-  Mail,
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { 
+  ShieldCheck, 
+  Twitter, 
+  Instagram, 
+  Linkedin, 
+  Mail, 
   Zap,
   Scan,
   Heart,
@@ -36,21 +37,21 @@ const Footer = () => {
   // ✅ Footer navigation data (translated using keys)
   const footerLinks = {
     product: [
-      { key: "aiScanner", icon: Scan, href: "#" },
-      { key: "nutritionDecoded", icon: Heart, href: "#" },
-      { key: "safetySignals", icon: Shield, href: "#" },
-      { key: "healthProfile", icon: User, href: "#" }
+      { name: 'AI Scanner', icon: Scan , href: '/scanner'},
+      { name: 'Nutrition Decoded', icon: Heart , href: '/nutrition-decoded'},
+      { name: 'Safety Signals', icon: Shield , href: '/safety-signals'},
+      { name: 'Health Profile', icon: User , href: '/health-profile'},
     ],
     company: [
-      { key: "aboutUs", icon: Info, href: "#" },
-      { key: "ourMission", icon: Target, href: "#" },
-      { key: "careers", icon: Briefcase, href: "#" },
-      { key: "contact", icon: MessageCircle, href: "#" }
+      { name: 'About Us', icon: Info , href: '/about'},
+      { name: 'Our Mission', icon: Target , href: '/mission'},
+      { name: 'Careers', icon: Briefcase , href: '/careers'},
+      { name: 'Contact', icon: MessageCircle , href: '/contact'},
     ],
     legal: [
-      { key: "privacyPolicy", icon: ShieldCheck, href: "#" },
-      { key: "termsOfService", icon: Scale, href: "#" },
-      { key: "cookiePolicy", icon: Cookie, href: "#" }
+      { name: 'Privacy Policy', icon: ShieldCheck , href: '/privacy-policy'},
+      { name: 'Terms of Service', icon: Scale , href: '/terms'},
+      { name: 'Cookie Policy', icon: Cookie , href: '/cookies'},
     ]
   };
 
@@ -226,9 +227,13 @@ const Footer = () => {
               {footerLinks.product.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <motion.li key={item.key} whileHover={{ x: 5 }} transition={{ type: "spring", stiffness: 300 }}>
-                    <a
-                      href={item.href}
+                  <motion.li 
+                    key={item.name}
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <Link 
+                      to={item.href} 
                       className="group flex items-center gap-3 text-sm text-gray-400 hover:text-indigo-400 transition-colors duration-200"
                     >
                       <Icon className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
@@ -236,7 +241,7 @@ const Footer = () => {
                         {t(`footer.links.product.${item.key}`)}
                       </span>
                       <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
+                    </Link>
                   </motion.li>
                 );
               })}
@@ -260,9 +265,13 @@ const Footer = () => {
               {footerLinks.company.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <motion.li key={item.key} whileHover={{ x: 5 }} transition={{ type: "spring", stiffness: 300 }}>
-                    <a
-                      href={item.href}
+                  <motion.li 
+                    key={item.name}
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <Link 
+                      to={item.href} 
                       className="group flex items-center gap-3 text-sm text-gray-400 hover:text-purple-400 transition-colors duration-200"
                     >
                       <Icon className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
@@ -270,7 +279,7 @@ const Footer = () => {
                         {t(`footer.links.company.${item.key}`)}
                       </span>
                       <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
+                    </Link>
                   </motion.li>
                 );
               })}
@@ -372,15 +381,14 @@ const Footer = () => {
             {footerLinks.legal.map((item) => {
               const Icon = item.icon;
               return (
-                <motion.a
-                  key={item.key}
-                  href={item.href}
+                <Link
+                  key={item.name}
+                  to={item.href}
                   className="group flex items-center gap-2 text-xs text-gray-500 hover:text-gray-300 transition-colors"
-                  whileHover={{ y: -2 }}
                 >
                   <Icon className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
-                  {t(`footer.links.legal.${item.key}`)}
-                </motion.a>
+                  {item.name}
+                </Link>
               );
             })}
           </div>
