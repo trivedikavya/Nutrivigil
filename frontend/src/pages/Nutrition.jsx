@@ -153,7 +153,7 @@ const Nutrition = () => {
                                 </div>
                                 {index < decodingSteps.length - 1 && (
                                     <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 text-purple-400">
-                                        <ChevronRight className="w-8 h-8" />
+                                        <ChevronRight className="w-8 h-8" aria-hidden="true" />
                                     </div>
                                 )}
                             </motion.div>
