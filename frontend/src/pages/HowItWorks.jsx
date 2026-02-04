@@ -115,7 +115,11 @@ const HowItWorks = () => {
 
                                 {/* Connector Line */}
                                 {index < steps.length - 1 && (
-                                    <div className="hidden md:block absolute left-12 top-24 w-0.5 h-16 bg-gradient-to-b from-purple-500/50 to-transparent transform translate-y-4"></div>
+                                    <div
+                                        className={`hidden md:block absolute top-24 w-0.5 h-16 bg-gradient-to-b from-purple-500/50 to-transparent transform translate-y-4 ${
+                                            index % 2 === 1 ? 'right-12' : 'left-12'
+                                        }`}
+                                    ></div>
                                 )}
                             </motion.div>
                         ))}
