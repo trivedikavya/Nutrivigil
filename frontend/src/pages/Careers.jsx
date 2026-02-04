@@ -207,7 +207,7 @@ const Careers = () => {
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {benefits.map((benefit, index) => (
                             <motion.div
-                                key={index}
+                                key={benefit.title}
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
