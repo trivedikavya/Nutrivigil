@@ -1,5 +1,6 @@
 import axios from "axios";
 import fs from "fs";
+import NodeCache from "node-cache";
 import { generateGeminiContent } from "../services/googleservices.js";
 import { getNutritionData } from "../services/ninjaServices.js";
 import imageToBase64 from "../utils/imgconversion.js";
@@ -15,20 +16,21 @@ import {
   InvalidAPIKeyError,
 } from "../utils/apiErrorHandler.js";
 
+// Initialize cache with 24-hour TTL
+const foodCache = new NodeCache({
+  stdTTL: 86400,  // 24 hours in seconds
+  checkperiod: 120  // Check for expired keys every 2 minutes
+});
+
 export const analyzeFood = async (req, res) => {
   let imagePath = null;
-
-  const language =
-    typeof req.body?.language === "string" && req.body.language.trim()
-      ? req.body.language
-      : "English";
 
   try {
     const condition = req.body.condition;
     const query = req.body.query;
     const existingFoodName = req.body.foodName;
 
-    // ---------------- FOLLOW-UP QUERY (NO IMAGE) ----------------
+    // Handle follow-up queries without image
     if (!req.file && query) {
       if (!existingFoodName) {
         return res.status(400).json({
@@ -41,61 +43,50 @@ export const analyzeFood = async (req, res) => {
       }
 
       const followUpPrompt = `
-      FOOD NAME (KEEP IN ENGLISH, DO NOT TRANSLATE):
-      ${existingFoodName}
-
-      Health Condition: ${condition}
-      User's Question: "${query}"
-
-      IMPORTANT RULES:
-      - Food name MUST remain in English
-      - Respond STRICTLY in ${language} for explanations
-      - Do NOT mix languages
-      - Do NOT add text outside JSON
-      - ALL explanation text must be in ${language}
-
-      Analyze if this food is safe based on the condition.
-
-      Output ONLY valid JSON:
-      {
-      "traffic_light": "green" | "yellow" | "red",
-      "verdict_title": "",
-      "answer": ""
-      }
+        Context: The user is asking about ${existingFoodName || "this food"}.
+        Health Condition: ${condition}
+        User's Question: "${query}"
+        
+        Analyze if this is safe based on the condition. 
+        Output ONLY JSON:
+        {
+          "traffic_light": "green", 
+          "verdict_title": "Follow-up Answer",
+          "answer": "Direct answer to the user's question and a add helpful tip.",
+        }
       `;
 
       try {
         const result = await generateGeminiContent(followUpPrompt);
-        const responseText =
-          result.response.candidates[0].content.parts[0].text;
+        const responseText = result.response.candidates[0].content.parts[0].text;
 
-        const parsedData = parseGeminiJson(responseText);
-
-        return res.json({
-          success: true,
-          food_name: existingFoodName,
-          ...parsedData,
-        });
+        try {
+          const parsedData = parseGeminiJson(responseText);
+          return res.json({
+            success: true,
+            food_name: existingFoodName,
+            ...parsedData,
+          });
+        } catch (parseError) {
+          logError(parseError, "[Analyze] Follow-up JSON parsing failed");
+          return res.status(500).json({
+            success: false,
+            error: {
+              message: "Failed to parse AI response. Please try again.",
+              code: "PARSE_ERROR",
+            },
+          });
+        }
       } catch (error) {
         if (error instanceof APIError) {
           logError(error, "[Analyze] Follow-up Gemini call failed");
-          return res
-            .status(error.statusCode)
-            .json(formatErrorResponse(error));
+          return res.status(error.statusCode).json(formatErrorResponse(error));
         }
-
-        logError(error, "[Analyze] Follow-up processing error");
-        return res.status(500).json({
-          success: false,
-          error: {
-            message: "Failed to process follow-up query.",
-            code: "FOLLOWUP_ERROR",
-          },
-        });
+        throw error;
       }
     }
 
-    // ---------------- IMAGE VALIDATION ----------------
+    // Validate image upload
     if (!req.file) {
       return res.status(400).json({
         success: false,
@@ -106,6 +97,7 @@ export const analyzeFood = async (req, res) => {
       });
     }
 
+    // Validate condition
     if (!condition) {
       return res.status(400).json({
         success: false,
@@ -122,7 +114,7 @@ export const analyzeFood = async (req, res) => {
       const base64 = imageToBase64(imagePath);
       const mimeType = getMimeType(imagePath);
 
-      // ---------------- STEP 1: FOOD IDENTIFICATION ----------------
+      // Step 1: Identify food in image
       let foodName;
       try {
         const identify = await generateGeminiContent({
@@ -131,80 +123,73 @@ export const analyzeFood = async (req, res) => {
               role: "user",
               parts: [
                 { inlineData: { data: base64, mimeType } },
-                { text: "Identify the dish. Output ONLY the name in English." },
+                { text: "Identify the dish. Output ONLY the name." },
               ],
             },
           ],
         });
 
-        foodName =
-          identify.response.candidates[0].content.parts[0].text.trim();
+        foodName = identify.response.candidates[0].content.parts[0].text.trim();
 
-        if (!foodName) {
+        if (!foodName || foodName.length === 0) {
           throw new Error("Could not identify the food in the image");
         }
       } catch (error) {
         if (error instanceof APIError) {
           logError(error, "[Analyze] Food identification failed");
-          return res
-            .status(error.statusCode)
-            .json(formatErrorResponse(error));
+          return res.status(error.statusCode).json(formatErrorResponse(error));
         }
         throw error;
       }
 
-      // ---------------- STEP 2: NUTRITION DATA (ENGLISH ONLY) ----------------
+      // Create unique cache key
+      const cacheKey = `${foodName.toLowerCase()}_${condition.toLowerCase()}`;
+
+      // Check if data exists in cache
+      const cachedResult = foodCache.get(cacheKey);
+
+      if (cachedResult) {
+        console.log(`✅ Cache HIT for ${cacheKey}`);
+        return res.json({
+          ...cachedResult,
+          fromCache: true
+        });
+      }
+
+      // Cache MISS - fetch from APIs
+      console.log(`❌ Cache MISS for ${cacheKey}`);
+
+      // Step 2: Get nutrition data
       let nutritionData = {};
       try {
         nutritionData = await getNutritionData(foodName);
       } catch (error) {
         if (error instanceof APIError) {
           logError(error, "[Analyze] Nutrition data fetch failed");
-          console.warn(
-            "Nutrition data unavailable, continuing with analysis..."
-          );
+          // Don't fail completely, continue with empty nutrition data
+          console.warn("Nutrition data unavailable, continuing with analysis...");
         } else {
           throw error;
         }
       }
 
-      // ---------------- STEP 3: ANALYSIS ----------------
+      // Step 3: Analyze food based on condition
       const analysisPrompt = `
-      FOOD NAME (KEEP IN ENGLISH, DO NOT TRANSLATE):
-      ${foodName}
+        Here is the nutritional data for ${foodName}: 
+        ${JSON.stringify(nutritionData)}
 
-      Here is the NUTRITIONAL DATA(KEEP EXACTLY IT AS IS, ENGLISH ONLY):
-      ${JSON.stringify(nutritionData)}
-
-      Health condition: "${condition}"
-
-      CRITICAL INSTRUCTIONS:
-      1. Food name MUST remain in English
-      2. Nutritional data MUST remain in English
-      3. Do NOT translate nutrient names or values
-      4. ONLY translate the following fields into ${language}:
-      - verdict_title
-      - reason
-      - suggestion
-      - alternatives[].name
-      - alternatives[].why
-      5. Do NOT mix languages
-      6. Do NOT add explanations outside JSON
-      7. ALL translated text MUST be in ${language}
-
-      Analyze this food for the given condition.
-      If the food is not "green", suggest 2–3 healthy alternatives safe for this condition.
-
-      Output ONLY valid JSON in this exact format:
-      {
-        "traffic_light": "green" | "yellow" | "red",
-        "verdict_title": "",
-        "reason": "",
-        "suggestion": "",
-        "alternatives": [
-      { "name": "", "why": "" }
-      ]
-      }
+        Analyze this food for someone with the condition: "${condition}"
+        If the food is not "green", suggest 2-3 healthy alternatives safe for this condition.
+        Output ONLY JSON in this exact format:
+        {
+          "traffic_light": "green" | "yellow" | "red",
+          "verdict_title": "",
+          "reason": "",
+          "suggestion": "",
+          "alternatives": [
+            { "name": "Alternative Name", "why": "Why it is safe" }
+          ]
+        }
       `;
 
       let analysis;
@@ -215,24 +200,32 @@ export const analyzeFood = async (req, res) => {
       } catch (error) {
         if (error instanceof APIError) {
           logError(error, "[Analyze] Analysis generation failed");
-          return res
-            .status(error.statusCode)
-            .json(formatErrorResponse(error));
+          return res.status(error.statusCode).json(formatErrorResponse(error));
         }
         throw error;
       }
 
-      const analysisText =
-        analysis.response.candidates[0].content.parts[0].text || "";
+      const analysisText = analysis.response.candidates[0].content.parts[0].text || "";
 
       try {
         const cleanJson = parseGeminiJson(analysisText);
 
-        return res.json({
+        const result = {
           success: true,
-          food_name: foodName, // English
-          nutrition: nutritionData, // English
-          ...cleanJson, // localized explanations
+          food_name: foodName,
+          nutrition: nutritionData,
+          ...cleanJson,
+        };
+
+        // Store in cache for 24 hours (only cache successful responses)
+        if (result && !result.error) {
+          foodCache.set(cacheKey, result);
+          console.log(`💾 Cached result for ${cacheKey}`);
+        }
+
+        res.json({
+          ...result,
+          fromCache: false
         });
       } catch (parseError) {
         logError(parseError, "[Analyze] Analysis JSON parsing failed");
@@ -245,19 +238,17 @@ export const analyzeFood = async (req, res) => {
         });
       }
     } catch (error) {
+      // Handle unexpected errors during analysis
       if (error instanceof APIError) {
         logError(error, "[Analyze] API Error during analysis");
-        return res
-          .status(error.statusCode)
-          .json(formatErrorResponse(error));
+        return res.status(error.statusCode).json(formatErrorResponse(error));
       }
 
       logError(error, "[Analyze] Unexpected error during processing");
       return res.status(500).json({
         success: false,
         error: {
-          message:
-            "An unexpected error occurred during analysis. Please try again.",
+          message: "An unexpected error occurred during analysis. Please try again.",
           code: "ANALYSIS_ERROR",
         },
       });
@@ -273,15 +264,12 @@ export const analyzeFood = async (req, res) => {
       },
     });
   } finally {
-    // ---------------- CLEANUP ----------------
+    // Clean up uploaded file
     if (imagePath && fs.existsSync(imagePath)) {
       try {
         fs.unlinkSync(imagePath);
       } catch (unlinkError) {
-        console.warn(
-          "Failed to delete uploaded file:",
-          unlinkError.message
-        );
+        console.warn("Failed to delete uploaded file:", unlinkError.message);
       }
     }
   }
