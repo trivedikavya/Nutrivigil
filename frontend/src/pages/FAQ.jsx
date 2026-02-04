@@ -172,6 +172,7 @@ const FAQ = () => {
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                         className="w-full pl-12 pr-4 py-4 bg-[#1a1f2e] border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-all"
+                                        aria-label="Search questions"
                                     />
                                 </div>
                             </div>
