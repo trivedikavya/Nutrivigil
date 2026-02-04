@@ -49,9 +49,9 @@ const Footer = () => {
       { name: 'Contact', key: 'contact', icon: MessageCircle , href: '/contact'},
     ],
     legal: [
-      { name: 'Privacy Policy', key: 'privacyPolicy', icon: ShieldCheck , href: '/privacy-policy'},
-      { name: 'Terms of Service', key: 'termsOfService', icon: Scale , href: '/terms'},
-      { name: 'Cookie Policy', key: 'cookiePolicy', icon: Cookie , href: '/cookies'},
+      { name: 'Privacy Policy', icon: ShieldCheck , href: '/privacy-policy'},
+      { name: 'Terms of Service', icon: Scale , href: '/terms'},
+      { name: 'Cookie Policy', icon: Cookie , href: '/cookies'},
     ]
   };
 
