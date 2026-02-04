@@ -38,7 +38,7 @@ const Footer = () => {
   const footerLinks = {
     product: [
       { name: 'AI Scanner', key: 'aiScanner', icon: Scan , href: '/scanner'},
-      { name: 'Nutrition Decoded', key: 'nutritionDecoded', icon: Heart , href: '/nutrition-decoded'},
+      { name: 'Nutrition Intelligence', key: 'nutritionDecoded', icon: Heart , href: '/nutrition'},
       { name: 'Safety Signals', key: 'safetySignals', icon: Shield , href: '/safety-signals'},
       { name: 'Health Profile', key: 'healthProfile', icon: User , href: '/health-profile'},
     ],

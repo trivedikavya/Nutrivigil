@@ -15,7 +15,6 @@ import AppInterface from "./pages/AppInterface";
 import Nutrition from "./pages/Nutrition";
 import HowItWorks from "./pages/HowItWorks";
 import Scanner from "./pages/Scanner";
-import NutritionDecoded from "./pages/NutritionDecoded";
 import SafetySignals from "./pages/SafetySignals";
 import HealthProfile from "./pages/HealthProfile";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -73,7 +72,6 @@ function App() {
           <Route path="/careers" element={<Careers />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/scanner" element={<Scanner />} />
-          <Route path="/nutrition-decoded" element={<NutritionDecoded />} />
           <Route path="/safety-signals" element={<SafetySignals />} />
           <Route path="/health-profile" element={<HealthProfile />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
