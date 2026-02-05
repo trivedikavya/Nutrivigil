@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Smartphone, Layout, Palette, Zap, Eye, Moon, Sun, Accessibility, Gauge, Shield, Heart, Camera, BarChart3, User, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Smartphone, Layout, Palette, Zap, Eye, Moon, Accessibility, Gauge, Shield, Heart, Camera, BarChart3, User, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const AppInterface = () => {
