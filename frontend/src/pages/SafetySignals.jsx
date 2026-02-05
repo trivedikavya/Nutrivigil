@@ -79,9 +79,7 @@ const SafetySignals = () => {
                                         </div>
                                     </div>
                                     <div className="text-left">
-                                        <p className="text-gray-300 text-lg">Quick guide: Green = safe, &nbsp;
-                                            Yellow = moderate caution, 
-                                            Red = avoid or limit.</p>
+                                        <p className="text-gray-300 text-lg">Quick guide: Green = safe, Yellow = moderate caution, Red = avoid or limit.</p>
                                     </div>
                                 </div>
                             </div>
