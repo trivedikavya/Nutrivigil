@@ -5,9 +5,6 @@ import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
 import i18n from './i18n';
 
-/**
- * Custom wrapper that provides all necessary context providers.
- */
 const AllTheProviders = ({ children }) => {
   return (
     <MemoryRouter>
