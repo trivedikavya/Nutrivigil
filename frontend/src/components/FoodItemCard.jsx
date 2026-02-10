@@ -3,12 +3,14 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 import { Package } from 'lucide-react';
 
-const FoodItemCard = ({ item, index = 0 }) => {
+const FoodItemCard = ({ item, index = 0, onViewDetails }) => {
   const { theme } = useTheme();
 
   const handleCardClick = () => {
-    // Detail modal will be implemented in Issue 3
-    alert('Coming Soon: Detailed nutrition information and analysis will be available in the next update!');
+    // Delegate click handling to parent so it can decide how to show details
+    if (typeof onViewDetails === 'function') {
+      onViewDetails(item);
+    }
   };
 
   return (
