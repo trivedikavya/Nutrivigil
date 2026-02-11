@@ -198,10 +198,10 @@ const CategoryDetail = () => {
   };
 
   // Remove individual filter
-  const handleRemoveFilter = (category, value) => {
+  const handleRemoveFilter = (filterCategory, value) => {
     const newFilters = {
       ...filters,
-      [category]: filters[category].filter((v) => v !== value),
+      [filterCategory]: filters[filterCategory].filter((v) => v !== value),
     };
     handleFilterChange(newFilters);
   };
