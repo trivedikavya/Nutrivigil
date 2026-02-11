@@ -32,10 +32,9 @@ const FILTER_OPTIONS = {
     icon: Award,
     color: 'indigo',
     options: [
-      { id: 'excellent', label: 'Excellent (70-100)', min: 70, max: 100 },
-      { id: 'good', label: 'Good (50-69)', min: 50, max: 69 },
-      { id: 'fair', label: 'Fair (30-49)', min: 30, max: 49 },
-      { id: 'poor', label: 'Poor (0-29)', min: 0, max: 29 },
+      { id: 'good', label: 'Good (70-100)', min: 70, max: 100 },
+      { id: 'fair', label: 'Fair (40-69)', min: 40, max: 69 },
+      { id: 'poor', label: 'Poor (0-39)', min: 0, max: 39 },
     ],
   },
   allergens: {
