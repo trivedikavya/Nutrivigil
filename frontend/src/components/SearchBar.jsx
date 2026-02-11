@@ -5,23 +5,33 @@ import { Search, X, Clock } from 'lucide-react';
 
 const MAX_RECENT_SEARCHES = 5;
 
+const loadRecentSearches = () => {
+  try {
+    const saved = localStorage.getItem('nutrivigil-recent-searches');
+    if (!saved) {
+      return [];
+    }
+    const parsed = JSON.parse(saved);
+    if (Array.isArray(parsed) && parsed.every((item) => typeof item === 'string')) {
+      return parsed;
+    }
+    return [];
+  } catch (e) {
+    return [];
+  }
+};
+
 const SearchBar = ({ value, onChange, placeholder = 'Search products...' }) => {
   const { theme } = useTheme();
   const [localValue, setLocalValue] = useState(value || '');
   const [showRecent, setShowRecent] = useState(false);
-  const [recentSearches, setRecentSearches] = useState(() => {
-    const saved = localStorage.getItem('nutrivigil-recent-searches');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [recentSearches, setRecentSearches] = useState(() => loadRecentSearches());
   const searchRef = useRef(null);
   const debounceTimer = useRef(null);
 
   // Load recent searches from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('nutrivigil-recent-searches');
-    if (saved) {
-      setRecentSearches(JSON.parse(saved));
-    }
+    setRecentSearches(loadRecentSearches());
   }, []);
 
   // Debounced search - call onChange after 300ms of no typing
