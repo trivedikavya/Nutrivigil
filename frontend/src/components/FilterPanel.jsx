@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 import {
@@ -52,8 +51,6 @@ const FilterPanel = ({ filters, onFilterChange, isOpen, onClose, isMobile }) => 
       ...uiConfig,
     };
   };
-
-  });
 
   const toggleSection = (section) => {
     setExpandedSections((prev) => ({
