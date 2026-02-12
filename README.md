@@ -281,16 +281,9 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 A huge thanks to all the amazing people who have contributed to NutriVigil! 🌟
 
-<table align="center">
-  <tr>
-    <td align="center">
-      <a href="https://github.com/Gagan021-5">
-        <img src="https://github.com/Gagan021-5.png?s=100" width="100px;" alt="Gagan"/><br />
-        <sub><b>Gagan</b></sub>
-      </a>
-    </td>
-    </tr>
-</table>
+<a href="https://github.com/Gagan021-5/Nutrivigil/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Gagan021-5/Nutrivigil" />
+</a>
 
 **Want to see your name here?** Check out our [CONTRIBUTING.md](./CONTRIBUTING.md) and start contributing!
 
