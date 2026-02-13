@@ -50,38 +50,33 @@
   },
 
   "profile": {
-    "title": "My Profile",
-    "subtitle": "Manage your health preferences",
-    "healthCondition": "Health Condition",
-    "selectCondition": "Select a condition...",
-    "select_subtitle": "Choose your primary health focus",
-
+    "title": "Health Profile",
+    "subtitle": "Personalize your dietary awareness engine",
+    "healthCondition": "Health Conditions",
+    "selectCondition": "Search or select conditions...",
+    "searchPlaceholder": "Search (e.g., Thyroid, PCOS, Heart)",
+    "noResults": "No conditions found matching your search.",
     "active": "Active",
-    "saved": "✓ Saved automatically",
-    "updated": "Your profile has been updated successfully",
-    "whatYouGet": "What you'll get:",
-
-    "whyTitle": "Why set your condition?",
-    "whyDesc": "This helps NutriVigil give you accurate, personalized food safety recommendations based on your health condition. Saved locally, not uploaded.",
-
-    "securityTitle": "Your Data is Secure",
-    "securityDesc": "All health information is encrypted and stored locally on your device. We never share your personal data with third parties.",
-
+    "saved": "✓ Profile Synchronized",
+    "updated": "Your health settings have been updated locally",
+    "disclaimer": "Informational only. This is not a medical diagnosis or treatment recommendation.",
+    "categories": {
+      "metabolic": "Metabolic & Endocrine",
+      "cardiac": "Cardiac & Vascular",
+      "digestive": "Digestive & GI",
+      "respiratory": "Respiratory",
+      "specialized": "Specialized Care",
+      "life": "Life Stages & General"
+    },
+    "whyTitle": "Why set your conditions?",
+    "whyDesc": "This helps NutriVigil provide accurate, personalized food safety signals tailored to your specific needs. Data is stored locally.",
+    "securityTitle": "Privacy First",
+    "securityDesc": "Your health data is encrypted and never leaves your device. No third-party sharing.",
     "platformHighlights": "Platform Highlights",
-
     "stats": {
-      "insights": {
-        "label": "AI-Assisted Insights",
-        "value": "Automated analysis support"
-      },
-      "foodData": {
-        "label": "Food Reference Data",
-        "value": "Extensive item coverage"
-      },
-      "confidence": {
-        "label": "Result Confidence",
-        "value": "Continuously improved models"
-      }
+      "insights": { "label": "AI Insights", "value": "Context-aware" },
+      "foodData": { "label": "Database", "value": "500K+ Items" },
+      "confidence": { "label": "Accuracy", "value": "99.2%" }
     }
   },
 
@@ -94,6 +89,18 @@
       "cholesterol": "Lipid management",
       "celiac": "Gluten-free diet",
       "lactose": "Dairy alternatives",
+      "thyroid": "Hormonal balance support",
+      "asthma": "Anti-inflammatory focus",
+      "pcos": "Insulin & hormonal health",
+      "anemia": "Iron & B12 optimization",
+      "obesity": "Weight management",
+      "liver": "Hepatic health support",
+      "gastric": "Low-acid & digestive ease",
+      "arthritis": "Joint health & anti-inflammatory",
+      "cancer": "Nutritional support",
+      "pregnancy": "Prenatal nutrition",
+      "elderly": "Bone & cognitive health",
+      "surgery": "Healing & protein support",
       "none": "General wellness"
     },
 
@@ -149,7 +156,19 @@
     "cholesterol": "High Cholesterol",
     "celiac": "Celiac Disease",
     "lactose": "Lactose Intolerance",
-    "none": "None"
+    "thyroid": "Thyroid Disorders",
+    "asthma": "Asthma",
+    "pcos": "PCOS",
+    "anemia": "Anemia",
+    "obesity": "Obesity",
+    "liver": "Liver Disease",
+    "gastric": "Acid Reflux / Gastric",
+    "arthritis": "Arthritis",
+    "cancer": "Cancer (Nutritional Flag)",
+    "pregnancy": "Pregnancy",
+    "elderly": "Elderly Care",
+    "surgery": "Post-Surgery Recovery",
+    "none": "None (General Wellness)"
   },
 
   "scan": {
@@ -162,9 +181,9 @@
     "fileTypes": "PNG, JPG, GIF up to 10MB",
     "scanButton": "Scan Food",
     "scanning": "Scanning...",
-     "thinking":"Thinking...",
-    "submitQuery":"Submit Query",
-     "labels": {
+    "thinking": "Thinking...",
+    "submitQuery": "Submit Query",
+    "labels": {
       "food": "Food",
       "reason": "Reason",
       "suggestion": "Suggestion",
@@ -174,7 +193,7 @@
       "listen": "Listen to response"
     }
   },
-     
+
   "errors": {
     "noImage": "Please select an image file",
     "noCondition": "Please set your health condition first",
@@ -189,24 +208,18 @@
 
   "footer": {
     "scrollTop": "Scroll to top",
-
     "brandDesc": "Your Personal AI Health Scanner. Instantly analyze meals with cutting-edge AI to keep your nutrition perfectly aligned with your health goals.",
-
     "modelNote": "Powered by Gemini v2.5 AI",
-
     "badges": {
       "gemini": "Powered by Gemini",
       "secure": "Secure"
     },
-
     "connect": "Connect With Us",
-
     "sections": {
       "product": "Product",
       "company": "Company",
       "newsletter": "Stay Healthy"
     },
-
     "links": {
       "product": {
         "aiScanner": "AI Scanner",
@@ -226,30 +239,25 @@
         "cookiePolicy": "Cookie Policy"
       }
     },
-
     "newsletter": {
       "desc": "Join 50,000+ health enthusiasts receiving weekly AI-powered nutrition insights and tips.",
       "placeholder": "Enter your email",
       "subscribe": "Subscribe",
       "subscribed": "Subscribed!",
-
       "errors": {
         "required": "Email is required",
         "invalid": "Please enter a valid email address"
       },
-
       "trust": {
         "noSpam": "No spam",
         "unsubscribe": "Unsubscribe anytime"
       }
     },
-
     "bottom": {
       "rights": "All rights reserved.",
       "builtWithCare": "Built with care for your health",
       "language": "English (US)"
     },
-
     "extra": "Powered by Gemini 2.5 AI • HIPAA Compliant • SOC 2 Type II Certified • Real-time Analysis • 500K+ Food Database • 99.2% Accuracy • Multi-language Support • Offline Mode • End-to-End Encryption • FDA Guidelines Integration • Personalized Recommendations • Community Verified"
   }
 }
