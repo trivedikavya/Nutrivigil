@@ -161,7 +161,6 @@ const HealthInsights = ({ nutrition, servingSize }) => {
                 cy="50"
                 r="40"
                 fill="none"
-                stroke={scoreDetails.color.replace('text-', '')}
                 strokeWidth="8"
                 strokeDasharray={`${(score / 100) * 251.2} 251.2`}
                 strokeLinecap="round"
