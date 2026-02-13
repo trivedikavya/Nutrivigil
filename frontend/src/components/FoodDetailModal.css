@@ -156,7 +156,7 @@
 }
 
 /* Softer backdrop for light theme */
-body.light .food-modal-backdrop {
+body.light-theme .food-modal-backdrop {
   background: rgba(0, 0, 0, 0.4);
 }
 
