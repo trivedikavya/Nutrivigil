@@ -1,65 +1,65 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Heart, Share2, Package } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { X, ChevronLeft, ChevronRight, Share2, Scale, Flag } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import NutritionFactsTable from './NutritionFactsTable';
+import HealthInsights from './HealthInsights';
+import IngredientsList from './IngredientsList';
+import DietaryBadges from './DietaryBadges';
+import { calculateNutritionScore } from '../utils/nutritionScore';
+import './FoodDetailModal.css';
 
-const FoodDetailModal = ({ isOpen, onClose, foodItem, categoryName }) => {
+const FoodDetailModal = ({ food, onClose, allFoods = [], currentIndex = -1, onNavigate }) => {
   const { theme } = useTheme();
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [touchStartY, setTouchStartY] = useState(0);
-  const [touchEndY, setTouchEndY] = useState(0);
 
-  // Handle ESC key to close modal
+  const hasPrevious = currentIndex > 0;
+  const hasNext = currentIndex >= 0 && currentIndex < allFoods.length - 1;
+
+  // Handle keyboard navigation
   useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape' && isOpen) {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
         onClose();
+      } else if (e.key === 'ArrowLeft' && hasPrevious && onNavigate) {
+        onNavigate('previous');
+      } else if (e.key === 'ArrowRight' && hasNext && onNavigate) {
+        onNavigate('next');
       }
     };
 
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      // Prevent body scroll when modal is open
-      document.body.style.overflow = 'hidden';
-    }
+    document.addEventListener('keydown', handleKeyDown);
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, onClose]);
+  }, [onClose, onNavigate, currentIndex, allFoods.length]);
 
-  // Handle swipe down to close on mobile
-  const handleTouchStart = (e) => {
-    if (!e.touches || e.touches.length === 0) return;
-    setTouchStartY(e.touches[0].clientY);
+  if (!food) return null;
+
+  const nutritionScore = food.nutrition ? calculateNutritionScore(food.nutrition) : 0;
+
+  // Get score color based on value
+  const getScoreColor = (score) => {
+    if (score >= 80) return 'text-green-500';
+    if (score >= 60) return 'text-yellow-500';
+    if (score >= 40) return 'text-orange-500';
+    return 'text-red-500';
   };
 
-  const handleTouchMove = (e) => {
-    if (!e.touches || e.touches.length === 0) return;
-    setTouchEndY(e.touches[0].clientY);
-  };
-
-  const handleTouchEnd = () => {
-    // If swiped down more than 100px, close modal
-    if (touchStartY && touchEndY && touchStartY - touchEndY < -100) {
+  // Handle backdrop click
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
       onClose();
     }
-    setTouchStartY(0);
-    setTouchEndY(0);
-  };
-
-  // Handle favorite toggle
-  const handleToggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    // TODO: Integrate with favorites system
   };
 
   // Handle share
   const handleShare = async () => {
     const shareData = {
-      title: foodItem.name,
-      text: `Check out ${foodItem.name} by ${foodItem.brand} on NutriVigil`,
+      title: food.name,
+      text: `Check out ${food.name} by ${food.brand} on NutriVigil`,
       url: window.location.href,
     };
 
@@ -67,231 +67,258 @@ const FoodDetailModal = ({ isOpen, onClose, foodItem, categoryName }) => {
       try {
         await navigator.share(shareData);
       } catch (err) {
-        // Fallback: copy to clipboard
-        navigator.clipboard.writeText(window.location.href);
-        if (typeof window !== 'undefined') {
-          window.dispatchEvent(
-            new CustomEvent('clipboard:copied', {
-              detail: { url: window.location.href },
-            }),
-          );
+        // User cancelled or error occurred
+        if (err.name !== 'AbortError') {
+          navigator.clipboard.writeText(window.location.href);
+          alert('Link copied to clipboard!');
         }
       }
     } else {
-      // Fallback for browsers that don't support Web Share API
       navigator.clipboard.writeText(window.location.href);
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(
-          new CustomEvent('clipboard:copied', {
-            detail: { url: window.location.href },
-          }),
-        );
-      }
+      alert('Link copied to clipboard!');
     }
   };
 
-  if (!foodItem) return null;
+  // Handle compare
+  const handleCompare = () => {
+    alert('Compare feature coming soon! This will allow you to compare this product with similar items.');
+  };
+
+  // Handle view alternatives
+  const handleViewAlternatives = () => {
+    alert('Healthier alternatives feature coming soon! This will show you better nutritional options.');
+  };
+
+  // Handle report
+  const handleReport = () => {
+    alert('Report feature coming soon! You can report incorrect nutrition information here.');
+  };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
-            aria-hidden="true"
-          />
+    <div
+      className="food-modal-backdrop"
+      onClick={handleBackdropClick}
+    >
+      <div
+        className={`food-modal ${theme === 'light' ? 'light' : ''} food-modal-animate`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
+        {/* Previous Button */}
+        {hasPrevious && onNavigate && (
+          <button
+            onClick={() => onNavigate('previous')}
+            className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full transition-all duration-200 ${
+              theme === 'dark'
+                ? 'bg-gray-800/90 hover:bg-gray-700 text-white'
+                : 'bg-white/90 hover:bg-gray-100 text-gray-900'
+            } backdrop-blur-sm shadow-lg hover:scale-110 focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+            aria-label="Previous food item"
+            title="Previous (← key)"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+        )}
 
-          {/* Modal Container */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.35, ease: 'easeOut' }}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              onClick={(e) => e.stopPropagation()}
-              className={`relative w-full max-w-4xl my-8 rounded-2xl shadow-2xl overflow-hidden ${
-                theme === 'dark'
-                  ? 'bg-gray-900/95 border border-white/10'
-                  : 'bg-white border border-gray-200'
-              } backdrop-blur-xl`}
-              style={{ maxHeight: 'calc(100vh - 4rem)' }}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="food-detail-modal-title"
-            >
-              {/* Accessible title for screen readers */}
-              <h2 id="food-detail-modal-title" className="sr-only">
-                {foodItem.name}
-              </h2>
-              {/* Swipe Indicator for Mobile */}
-              <div className="md:hidden flex justify-center pt-2 pb-1">
-                <div className={`w-12 h-1 rounded-full ${
-                  theme === 'dark' ? 'bg-white/20' : 'bg-gray-300'
-                }`} />
+        {/* Next Button */}
+        {hasNext && onNavigate && (
+          <button
+            onClick={() => onNavigate('next')}
+            className={`absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full transition-all duration-200 ${
+              theme === 'dark'
+                ? 'bg-gray-800/90 hover:bg-gray-700 text-white'
+                : 'bg-white/90 hover:bg-gray-100 text-gray-900'
+            } backdrop-blur-sm shadow-lg hover:scale-110 focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+            aria-label="Next food item"
+            title="Next (→ key)"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+        )}
+
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className={`food-modal-close ${theme === 'dark' ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'}`}
+          aria-label="Close modal"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        {/* Modal Content */}
+        <div className="food-modal-scroll">
+          {/* Header Section */}
+          <div className="food-modal-header">
+            {/* Product Image */}
+            {food.image && (
+              <div className="food-modal-image-container">
+                <img
+                  src={food.image}
+                  alt={food.name}
+                  className="food-modal-image"
+                />
               </div>
+            )}
 
-              {/* Close Button - Top Right */}
-              <button
-                onClick={onClose}
-                className={`absolute top-4 right-4 z-10 p-2 rounded-full transition-all duration-200 ${
-                  theme === 'dark'
-                    ? 'bg-gray-800/90 hover:bg-gray-700 text-white'
-                    : 'bg-white/90 hover:bg-gray-100 text-gray-900'
-                } backdrop-blur-sm shadow-lg hover:scale-110 focus:outline-none focus:ring-2 focus:ring-indigo-500`}
-                aria-label="Close modal"
+            {/* Product Info */}
+            <div className="food-modal-info">
+              <h2
+                id="modal-title"
+                className={`text-3xl font-bold mb-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}
               >
-                <X className="w-5 h-5" />
+                {food.name}
+              </h2>
+              {food.brand && (
+                <p className={`text-lg mb-3 ${
+                  theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                }`}>
+                  {food.brand}
+                </p>
+              )}
+
+              {/* Nutrition Score Badge */}
+              <div className="flex items-center gap-3">
+                <div
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold ${
+                    theme === 'dark'
+                      ? 'bg-white/10 text-gray-300'
+                      : 'bg-gray-100 text-gray-700'
+                  }`}
+                >
+                  <span>Nutrition Score:</span>
+                  <span className={getScoreColor(nutritionScore)}>
+                    {nutritionScore}/100
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className={`my-6 border-t ${
+            theme === 'dark' ? 'border-white/10' : 'border-gray-200'
+          }`} />
+
+          {/* Nutrition Facts Table */}
+          <div className="food-modal-nutrition">
+            <NutritionFactsTable
+              nutrition={food.nutrition}
+              servingSize={food.servingSize}
+            />
+          </div>
+
+          {/* Divider */}
+          <div className={`my-6 border-t ${
+            theme === 'dark' ? 'border-white/10' : 'border-gray-200'
+          }`} />
+
+          {/* Health Insights */}
+          <div className="mb-6">
+            <h3 className={`text-2xl font-bold mb-4 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}>
+              Health Insights
+            </h3>
+            <HealthInsights
+              nutrition={food.nutrition}
+              servingSize={food.servingSize}
+            />
+          </div>
+
+          {/* Divider */}
+          <div className={`my-6 border-t ${
+            theme === 'dark' ? 'border-white/10' : 'border-gray-200'
+          }`} />
+
+          {/* Dietary Badges */}
+          <div className="mb-6">
+            <DietaryBadges dietary={food.dietary} />
+          </div>
+
+          {/* Divider */}
+          <div className={`my-6 border-t ${
+            theme === 'dark' ? 'border-white/10' : 'border-gray-200'
+          }`} />
+
+          {/* Ingredients List */}
+          <div className="mb-6">
+            <IngredientsList
+              ingredients={food.ingredients}
+              allergens={food.allergens}
+            />
+          </div>
+
+          {/* Divider */}
+          <div className={`my-6 border-t ${
+            theme === 'dark' ? 'border-white/10' : 'border-gray-200'
+          }`} />
+
+          {/* Action Buttons */}
+          <div className="mb-6">
+            <h3 className={`text-xl font-bold mb-4 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}>
+              Actions
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {/* Share Button */}
+              <button
+                onClick={handleShare}
+                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${
+                  theme === 'dark'
+                    ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 border border-blue-500/50'
+                    : 'bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200'
+                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              >
+                <Share2 className="w-5 h-5" />
+                Share
               </button>
 
-              {/* Modal Content - Two Column Layout */}
-              <div className="flex flex-col md:flex-row overflow-hidden" style={{ maxHeight: 'calc(100vh - 8rem)' }}>
-                {/* Left Panel - Product Image & Basic Info (40%) */}
-                <div className={`md:w-2/5 p-6 flex flex-col gap-4 ${
+              {/* Compare Button */}
+              <button
+                onClick={handleCompare}
+                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${
                   theme === 'dark'
-                    ? 'bg-gradient-to-br from-gray-800/50 to-gray-900/50'
-                    : 'bg-gradient-to-br from-gray-50 to-gray-100'
-                }`}>
-                  {/* Product Image */}
-                  <div className="relative rounded-xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 aspect-square">
-                    {foodItem.image ? (
-                      <img
-                        src={foodItem.image}
-                        alt={foodItem.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <Package
-                          className={`w-24 h-24 ${
-                            theme === 'dark' ? 'text-gray-600' : 'text-gray-300'
-                          }`}
-                        />
-                      </div>
-                    )}
-                  </div>
+                    ? 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 border border-purple-500/50'
+                    : 'bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200'
+                } focus:outline-none focus:ring-2 focus:ring-purple-500`}
+              >
+                <Scale className="w-5 h-5" />
+                Compare
+              </button>
 
-                  {/* Product Info */}
-                  <div className="space-y-3">
-                    {/* Product Name */}
-                    <h2 className={`text-2xl font-bold leading-tight ${
-                      theme === 'dark' ? 'text-white' : 'text-gray-900'
-                    }`}>
-                      {foodItem.name}
-                    </h2>
+              {/* Report Button */}
+              <button
+                onClick={handleReport}
+                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${
+                  theme === 'dark'
+                    ? 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30 border border-orange-500/50'
+                    : 'bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200'
+                } focus:outline-none focus:ring-2 focus:ring-orange-500`}
+              >
+                <Flag className="w-5 h-5" />
+                Report
+              </button>
+            </div>
 
-                    {/* Brand Name */}
-                    <p className={`text-lg font-medium ${
-                      theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600'
-                    }`}>
-                      {foodItem.brand}
-                    </p>
-
-                    {/* Serving Size */}
-                    <div className="flex items-center gap-2">
-                      <span className={`text-sm font-semibold ${
-                        theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                      }`}>
-                        Serving Size:
-                      </span>
-                      <span className={`text-sm font-bold px-3 py-1 rounded-full ${
-                        theme === 'dark'
-                          ? 'bg-white/10 text-white'
-                          : 'bg-gray-200 text-gray-900'
-                      }`}>
-                        {foodItem.servingSize}
-                      </span>
-                    </div>
-
-                    {/* Category Badge */}
-                    {categoryName && (
-                      <div className="flex items-center gap-2">
-                        <span className={`text-sm font-semibold ${
-                          theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                        }`}>
-                          Category:
-                        </span>
-                        <span className={`text-sm font-bold px-3 py-1 rounded-full ${
-                          theme === 'dark'
-                            ? 'bg-indigo-500/20 text-indigo-400'
-                            : 'bg-indigo-100 text-indigo-700'
-                        }`}>
-                          {categoryName}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-3 mt-auto pt-4">
-                    {/* Favorite Button */}
-                    <button
-                      onClick={handleToggleFavorite}
-                      className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
-                        isFavorite
-                          ? 'bg-red-500 text-white hover:bg-red-600'
-                          : theme === 'dark'
-                          ? 'bg-white/10 text-white hover:bg-white/20'
-                          : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
-                      }`}
-                      aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                    >
-                      <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
-                      <span className="hidden sm:inline">
-                        {isFavorite ? 'Favorited' : 'Favorite'}
-                      </span>
-                    </button>
-
-                    {/* Share Button */}
-                    <button
-                      onClick={handleShare}
-                      className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
-                        theme === 'dark'
-                          ? 'bg-white/10 text-white hover:bg-white/20'
-                          : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
-                      }`}
-                      aria-label="Share this food item"
-                    >
-                      <Share2 className="w-5 h-5" />
-                      <span className="hidden sm:inline">Share</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Right Panel - Detailed Information (60%) */}
-                <div className={`md:w-3/5 p-6 overflow-y-auto ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                  {/* Placeholder for Phase 2, 3, 4 content */}
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className={`text-xl font-bold mb-4 ${
-                        theme === 'dark' ? 'text-white' : 'text-gray-900'
-                      }`}>
-                        Nutrition Information
-                      </h3>
-                      <p className={`text-sm ${
-                        theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                      }`}>
-                        Detailed nutrition facts will be displayed here in Phase 2.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+            {/* View Healthier Alternatives Button - Full Width */}
+            <button
+              onClick={handleViewAlternatives}
+              className={`mt-3 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${
+                theme === 'dark'
+                  ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30 border border-green-500/50'
+                  : 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
+              } focus:outline-none focus:ring-2 focus:ring-green-500`}
+            >
+              View Healthier Alternatives
+            </button>
           </div>
-        </>
-      )}
-    </AnimatePresence>
+        </div>
+      </div>
+    </div>
   );
 };
 

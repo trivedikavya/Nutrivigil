@@ -187,6 +187,7 @@ const CategoryDetail = () => {
   const [category, setCategory] = useState(null);
   const [foodItems, setFoodItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFood, setSelectedFood] = useState(null);
   const [viewMode, setViewMode] = useState(() => {
     // Load view preference from localStorage
     return localStorage.getItem('nutrivigil-view-mode') || 'grid';
@@ -206,22 +207,6 @@ const CategoryDetail = () => {
     }
     return DEFAULT_FILTERS;
   });
-  // Modal state for food detail
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedFood, setSelectedFood] = useState(null);
-
-  // Handle opening food detail modal
-  const handleViewDetails = (foodItem) => {
-    setSelectedFood(foodItem);
-    setIsModalOpen(true);
-  };
-
-  // Handle closing food detail modal
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    // Delay clearing selected food for smooth exit animation
-    setTimeout(() => setSelectedFood(null), 350);
-  };
 
   // Handle view mode change and save to localStorage
   const handleViewModeChange = (mode) => {
@@ -247,6 +232,36 @@ const CategoryDetail = () => {
   // Clear all filters
   const handleClearAllFilters = () => {
     handleFilterChange(DEFAULT_FILTERS);
+  };
+
+  // Handle view details for food item
+  const handleViewDetails = (food) => {
+    setSelectedFood(food);
+  };
+
+  // Close food detail modal
+  const handleCloseModal = () => {
+    setSelectedFood(null);
+  };
+
+  // Memoized index of the currently selected food item within the searched results
+  const selectedFoodIndex = useMemo(() => {
+    if (!selectedFood || !searchedFoodItems || searchedFoodItems.length === 0) {
+      return -1;
+    }
+
+    return searchedFoodItems.findIndex((item) => item.id === selectedFood.id);
+  }, [selectedFood, searchedFoodItems]);
+
+  // Handle navigation in modal (Previous/Next)
+  const handleModalNavigate = (direction) => {
+    if (!selectedFood || selectedFoodIndex === -1) return;
+
+    if (direction === 'previous' && selectedFoodIndex > 0) {
+      setSelectedFood(searchedFoodItems[selectedFoodIndex - 1]);
+    } else if (direction === 'next' && selectedFoodIndex < searchedFoodItems.length - 1) {
+      setSelectedFood(searchedFoodItems[selectedFoodIndex + 1]);
+    }
   };
 
   // Check if any filters are active
@@ -629,12 +644,15 @@ const CategoryDetail = () => {
       </div>
 
       {/* Food Detail Modal */}
-      <FoodDetailModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        foodItem={selectedFood}
-        categoryName={category?.name}
-      />
+      {selectedFood && (
+        <FoodDetailModal
+          food={selectedFood}
+          onClose={handleCloseModal}
+          allFoods={searchedFoodItems}
+          currentIndex={searchedFoodItems.findIndex((item) => item.id === selectedFood.id)}
+          onNavigate={handleModalNavigate}
+        />
+      )}
     </div>
   );
 };
