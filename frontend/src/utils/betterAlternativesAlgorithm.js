@@ -119,7 +119,7 @@ function calculateImprovements(currentNutrition, alternativeNutrition) {
   const currentProtein = parseFloat(currentNutrition.protein) || 0;
   const altProtein = parseFloat(alternativeNutrition.protein) || 0;
   if (currentProtein < 10 && altProtein > currentProtein) {
-    const increase = ((altProtein - currentProtein) / currentProtein) * 100;
+    const increase = ((altProtein - currentProtein) / (currentProtein || 1)) * 100;
     if (increase >= 30) {
       improvements.protein = {
         label: 'Higher Protein',
