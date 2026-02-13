@@ -220,7 +220,7 @@ const CategoryDetail = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     // Delay clearing selected food for smooth exit animation
-    setTimeout(() => setSelectedFood(null), 300);
+    setTimeout(() => setSelectedFood(null), 350);
   };
 
   // Handle view mode change and save to localStorage
