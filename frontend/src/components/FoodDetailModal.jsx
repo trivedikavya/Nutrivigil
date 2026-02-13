@@ -110,7 +110,14 @@ const FoodDetailModal = ({ isOpen, onClose, foodItem, categoryName }) => {
                   : 'bg-white border border-gray-200'
               } backdrop-blur-xl`}
               style={{ maxHeight: 'calc(100vh - 4rem)' }}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="food-detail-modal-title"
             >
+              {/* Accessible title for screen readers */}
+              <h2 id="food-detail-modal-title" className="sr-only">
+                {foodItem.name}
+              </h2>
               {/* Swipe Indicator for Mobile */}
               <div className="md:hidden flex justify-center pt-2 pb-1">
                 <div className={`w-12 h-1 rounded-full ${
