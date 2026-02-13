@@ -3,7 +3,7 @@ import { CheckCircle, AlertTriangle, Lightbulb } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { calculateNutritionScore } from '../utils/nutritionScore';
 
-const HealthInsights = ({ nutrition, servingSize }) => {
+const HealthInsights = ({ nutrition }) => {
   const { theme } = useTheme();
 
   if (!nutrition) {
