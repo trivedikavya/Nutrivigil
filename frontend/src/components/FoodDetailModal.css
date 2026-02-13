@@ -9,6 +9,7 @@
   z-index: 50;
   animation: backdropFadeIn 0.25s ease-out forwards;
   padding: 1rem;
+  overflow-y: auto;
 }
 
 /* Modal container */
