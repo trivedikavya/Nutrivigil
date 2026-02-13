@@ -98,11 +98,13 @@ const FoodDetailModal = ({ food, onClose, allFoods = [], currentIndex = -1, onNa
     <div
       className="food-modal-backdrop"
       onClick={handleBackdropClick}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
     >
-      <div className={`food-modal ${theme === 'light' ? 'light' : ''} food-modal-animate`}>
+      <div
+        className={`food-modal ${theme === 'light' ? 'light' : ''} food-modal-animate`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         {/* Previous Button */}
         {hasPrevious && onNavigate && (
           <button
