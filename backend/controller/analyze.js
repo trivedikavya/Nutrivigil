@@ -26,7 +26,7 @@ export const analyzeFood = async (req, res) => {
   let imagePath = null;
 
   try {
-    const condition = req.body.condition;
+    const condition = req.body.condition; // This is now a comma-separated string of conditions
     const query = req.body.query;
     const existingFoodName = req.body.foodName;
 
@@ -42,17 +42,19 @@ export const analyzeFood = async (req, res) => {
         });
       }
 
+      // Updated prompt to handle multi-condition profile
       const followUpPrompt = `
         Context: The user is asking about ${existingFoodName || "this food"}.
-        Health Condition: ${condition}
+        Health Profile (Conditions): ${condition}
         User's Question: "${query}"
         
-        Analyze if this is safe based on the condition. 
+        Analyze if this is safe based on the entire health profile provided. 
+        Consider potential risks or interactions for EACH condition listed.
         Output ONLY JSON:
         {
-          "traffic_light": "green", 
+          "traffic_light": "green" | "yellow" | "red", 
           "verdict_title": "Follow-up Answer",
-          "answer": "Direct answer to the user's question and a add helpful tip.",
+          "answer": "Direct answer to the user's question, accounting for all listed health conditions.",
         }
       `;
 
@@ -102,7 +104,7 @@ export const analyzeFood = async (req, res) => {
       return res.status(400).json({
         success: false,
         error: {
-          message: "Health condition is required for analysis.",
+          message: "Health profile is required for analysis.",
           code: "NO_CONDITION",
         },
       });
@@ -142,7 +144,7 @@ export const analyzeFood = async (req, res) => {
         throw error;
       }
 
-      // Create unique cache key
+      // Create unique cache key (handles the combined condition string)
       const cacheKey = `${foodName.toLowerCase()}_${condition.toLowerCase()}`;
 
       // Check if data exists in cache
@@ -166,28 +168,33 @@ export const analyzeFood = async (req, res) => {
       } catch (error) {
         if (error instanceof APIError) {
           logError(error, "[Analyze] Nutrition data fetch failed");
-          // Don't fail completely, continue with empty nutrition data
           console.warn("Nutrition data unavailable, continuing with analysis...");
         } else {
           throw error;
         }
       }
 
-      // Step 3: Analyze food based on condition
+      // Step 3: Analyze food based on multi-condition profile
       const analysisPrompt = `
         Here is the nutritional data for ${foodName}: 
         ${JSON.stringify(nutritionData)}
 
-        Analyze this food for someone with the condition: "${condition}"
-        If the food is not "green", suggest 2-3 healthy alternatives safe for this condition.
+        Analyze this food for someone with the following health profile: "${condition}"
+        
+        CRITICAL INSTRUCTIONS:
+        1. Check for interactions or risks across ALL listed conditions simultaneously.
+        2. If the food is unsafe or requires caution for ANY of the listed conditions, the traffic light MUST be "red" or "yellow" accordingly.
+        3. Provide a unified reason that explains the impact on the specific conditions listed.
+        4. Suggest 2-3 healthy alternatives that are safe for THIS specific multi-condition profile.
+
         Output ONLY JSON in this exact format:
         {
           "traffic_light": "green" | "yellow" | "red",
-          "verdict_title": "",
-          "reason": "",
-          "suggestion": "",
+          "verdict_title": "Analysis Result",
+          "reason": "Detailed explanation regarding the safety for all listed conditions.",
+          "suggestion": "Specific guidance for the user's health profile.",
           "alternatives": [
-            { "name": "Alternative Name", "why": "Why it is safe" }
+            { "name": "Alternative Name", "why": "Why it is safe for all the listed conditions" }
           ]
         }
       `;
@@ -217,7 +224,7 @@ export const analyzeFood = async (req, res) => {
           ...cleanJson,
         };
 
-        // Store in cache for 24 hours (only cache successful responses)
+        // Store in cache for 24 hours
         if (result && !result.error) {
           foodCache.set(cacheKey, result);
           console.log(`💾 Cached result for ${cacheKey}`);
@@ -238,7 +245,6 @@ export const analyzeFood = async (req, res) => {
         });
       }
     } catch (error) {
-      // Handle unexpected errors during analysis
       if (error instanceof APIError) {
         logError(error, "[Analyze] API Error during analysis");
         return res.status(error.statusCode).json(formatErrorResponse(error));
@@ -258,13 +264,11 @@ export const analyzeFood = async (req, res) => {
     return res.status(500).json({
       success: false,
       error: {
-        message:
-          "A critical error occurred. Please check your internet connection and try again.",
+        message: "A critical error occurred. Please check your internet connection.",
         code: "CRITICAL_ERROR",
       },
     });
   } finally {
-    // Clean up uploaded file
     if (imagePath && fs.existsSync(imagePath)) {
       try {
         fs.unlinkSync(imagePath);
