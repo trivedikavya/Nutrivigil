@@ -62,9 +62,9 @@ const FOOD_ITEMS = {
     { id: 10, name: 'semi-sweet-baking-chips', brand: 'Nestle Toll House', servingSize: '1 tbsp (14g)', image: semiSweetBakingChips, nutrition: { calories: 70, protein: 1, carbs: 9, totalFat: 4, saturatedFat: 2.5, transFat: 0, sodium: 0, sugar: 8, fiber: 1 } },
     { id: 11, name: 'pure-pumpkin', brand: 'Ghirardelli', servingSize: '1/20 package (39g)', image: purePumpkin, nutrition: { calories: 170, protein: 2, carbs: 27, totalFat: 7, saturatedFat: 2, transFat: 0, sodium: 105, sugar: 20, fiber: 2 } },
     { id: 12, name: 'honey-corn-muffin-mix', brand: 'Bisquick', servingSize: '1/3 cup (40g)', image: honeyCornMuffinMix, nutrition: { calories: 150, protein: 3, carbs: 27, totalFat: 3, saturatedFat: 0.5, transFat: 0, sodium: 490, sugar: 3, fiber: 1 } },
-    { id: 13, name: '4c-japanese-panko-breadcrumbs', brand: 'Argo', servingSize: '1 tbsp (8g)', image: fourCJapanesePankoBreadcrumbs, nutrition: { calories: 30, protein: 0, carbs: 7, totalFat: 0, saturatedFat: 0, transFat: 0, sodium: 0, sugar: 0, fiber: 0 } },
-    { id: 14, name: '4ca-japanese-seasoned-panko', brand: 'Hershey\'s', servingSize: '1 tbsp (5g)', image: fourCAJapaneseSeasonedPanko, nutrition: { calories: 10, protein: 1, carbs: 3, totalFat: 0.5, saturatedFat: 0, transFat: 0, sodium: 0, sugar: 0, fiber: 1 } },
-    { id: 15, name: '4c-plain-bread-crumbs', brand: 'King Arthur', servingSize: '1/8 package (57g)', image: fourCPlainBreadCrumbs, nutrition: { calories: 200, protein: 6, carbs: 40, totalFat: 1.5, saturatedFat: 0, transFat: 0, sodium: 480, sugar: 3, fiber: 2 } },
+    { id: 13, name: '4c-japanese-panko-breadcrumbs', brand: '4C', servingSize: '1 tbsp (8g)', image: fourCJapanesePankoBreadcrumbs, nutrition: { calories: 30, protein: 0, carbs: 7, totalFat: 0, saturatedFat: 0, transFat: 0, sodium: 0, sugar: 0, fiber: 0 } },
+    { id: 14, name: '4ca-japanese-seasoned-panko', brand: '4C', servingSize: '1 tbsp (5g)', image: fourCAJapaneseSeasonedPanko, nutrition: { calories: 10, protein: 1, carbs: 3, totalFat: 0.5, saturatedFat: 0, transFat: 0, sodium: 0, sugar: 0, fiber: 1 } },
+    { id: 15, name: '4c-plain-bread-crumbs', brand: '4C', servingSize: '1/8 package (57g)', image: fourCPlainBreadCrumbs, nutrition: { calories: 200, protein: 6, carbs: 40, totalFat: 1.5, saturatedFat: 0, transFat: 0, sodium: 480, sugar: 3, fiber: 2 } },
   ],
 
   'bread': [
