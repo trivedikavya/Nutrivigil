@@ -44,7 +44,7 @@ const ComparisonBar = () => {
                     } rounded-lg px-3 py-2 flex-shrink-0`}
                   >
                     <img
-                      src={product.imageUrl}
+                      src={product.image || product.imageUrl}
                       alt={product.name}
                       className="w-8 h-8 object-cover rounded"
                     />
